@@ -11,6 +11,8 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'bento' | 'fruit'>('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [showModal, setShowModal] = useState(false)
 
   // 初期データ読み込み
   useEffect(() => {
@@ -50,6 +52,18 @@ export default function Home() {
       alert('カートへの追加に失敗しました')
       console.error(err)
     }
+  }
+
+  // 商品詳細を表示
+  const handleShowDetails = (product: Product) => {
+    setSelectedProduct(product)
+    setShowModal(true)
+  }
+
+  // モーダルを閉じる
+  const handleCloseModal = () => {
+    setShowModal(false)
+    setSelectedProduct(null)
   }
 
   if (loading) {
@@ -158,17 +172,18 @@ export default function Home() {
                   </span>
                 </div>
                 <div className="flex space-x-2">
-                  <Link 
-                    href={`/products/${product.id}`}
-                    className="flex-1 text-center btn-secondary"
+                  <button
+                    onClick={() => handleShowDetails(product)}
+                    className="flex-1 btn-secondary"
                   >
                     詳細
-                  </Link>
+                  </button>
                   <button
                     onClick={() => handleAddToCart(product.id)}
                     className="flex-1 btn-primary"
+                    disabled={product.stock === 0}
                   >
-                    カートに追加
+                    {product.stock > 0 ? 'カートに追加' : '在庫切れ'}
                   </button>
                 </div>
               </div>
@@ -183,6 +198,73 @@ export default function Home() {
           © 2025 お弁当・果物通販サイト. All rights reserved.
         </p>
       </footer>
+
+      {/* 商品詳細モーダル */}
+      {showModal && selectedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-bold">{selectedProduct.name}</h2>
+                <button
+                  onClick={handleCloseModal}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                  selectedProduct.category === 'bento'
+                    ? 'bg-orange-100 text-orange-800'
+                    : 'bg-green-100 text-green-800'
+                }`}>
+                  {selectedProduct.category === 'bento' ? 'お弁当' : '果物'}
+                </span>
+              </div>
+
+              <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                <span className="text-gray-500">商品画像</span>
+              </div>
+
+              <p className="text-gray-700 mb-4">{selectedProduct.description}</p>
+              
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-3xl font-bold text-primary-600">
+                  ¥{selectedProduct.price}
+                </span>
+                <span className={`text-sm ${
+                  selectedProduct.stock > 10 ? 'text-green-600' : 'text-orange-600'
+                }`}>
+                  在庫: {selectedProduct.stock}個
+                </span>
+              </div>
+
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => {
+                    handleAddToCart(selectedProduct.id)
+                    handleCloseModal()
+                  }}
+                  className="flex-1 btn-primary"
+                  disabled={selectedProduct.stock === 0}
+                >
+                  {selectedProduct.stock > 0 ? 'カートに追加' : '在庫切れ'}
+                </button>
+                <button
+                  onClick={handleCloseModal}
+                  className="btn-secondary"
+                >
+                  閉じる
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
