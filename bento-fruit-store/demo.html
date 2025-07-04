@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お弁当・果物通販サイト</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 0.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #3b82f6;
+            background: white;
+            color: #3b82f6;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .cart-count {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        footer {
+            background: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-radius: 0.5rem;
+        }
+
+        .admin-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .admin-link:hover {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🍱 お弁当・果物通販</div>
+                <div class="nav-links">
+                    <a href="#" class="btn btn-primary" onclick="showCart()">
+                        🛒 カート <span id="cart-count" class="cart-count">0</span>
+                    </a>
+                    <a href="#" class="btn btn-secondary">ログイン</a>
+                    <a href="#admin" class="admin-link">管理画面</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>新鮮なお弁当と果物をお届け</h1>
+            <p>毎日作りたての美味しいお弁当と、産地直送の新鮮な果物をご提供しています。</p>
+            <a href="#products" class="btn btn-secondary">商品を見る</a>
+        </section>
+
+        <section id="products">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">おすすめ商品</h2>
+            
+            <div class="category-filter">
+                <button class="filter-btn active" onclick="filterProducts('all')">すべて</button>
+                <button class="filter-btn" onclick="filterProducts('bento')">🍱 お弁当</button>
+                <button class="filter-btn" onclick="filterProducts('fruit')">🍎 果物</button>
+            </div>
+
+            <div class="products-grid" id="products-grid">
+                <!-- 商品はJavaScriptで動的に生成 -->
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 お弁当・果物通販サイト. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // サンプル商品データ
+        const products = [
+            {
+                id: 1,
+                name: '特製幕の内弁当',
+                description: '栄養バランスの取れた人気のお弁当です',
+                price: 680,
+                category: 'bento',
+                emoji: '🍱',
+                stock: 50
+            },
+            {
+                id: 2,
+                name: '唐揚げ弁当',
+                description: 'ジューシーな唐揚げがメインのお弁当',
+                price: 580,
+                category: 'bento',
+                emoji: '🍗',
+                stock: 30
+            },
+            {
+                id: 3,
+                name: '海鮮弁当',
+                description: '新鮮な海鮮がたっぷり入った豪華なお弁当',
+                price: 980,
+                category: 'bento',
+                emoji: '🍤',
+                stock: 20
+            },
+            {
+                id: 4,
+                name: '青森りんご',
+                description: '甘くて新鮮な青森産りんご',
+                price: 150,
+                category: 'fruit',
+                emoji: '🍎',
+                stock: 100
+            },
+            {
+                id: 5,
+                name: '熊本みかん',
+                description: 'ジューシーで甘い熊本産みかん',
+                price: 120,
+                category: 'fruit',
+                emoji: '🍊',
+                stock: 80
+            },
+            {
+                id: 6,
+                name: '山形さくらんぼ',
+                description: '甘くてジューシーな山形産さくらんぼ',
+                price: 300,
+                category: 'fruit',
+                emoji: '🍒',
+                stock: 60
+            }
+        ];
+
+        let cart = [];
+        let currentFilter = 'all';
+
+        // 商品表示
+        function displayProducts(productsToShow = products) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            productsToShow.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">¥${product.price}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-secondary" onclick="viewProduct(${product.id})">詳細</button>
+                            <button class="btn btn-primary" onclick="addToCart(${product.id})">カートに追加</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(productCard);
+            });
+        }
+
+        // カテゴリフィルター
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // フィルターボタンのアクティブ状態を更新
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 商品をフィルター
+            const filteredProducts = category === 'all' 
+                ? products 
+                : products.filter(p => p.category === category);
+            
+            displayProducts(filteredProducts);
+        }
+
+        // カートに追加
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartCount();
+            alert(`${product.name} をカートに追加しました！`);
+        }
+
+        // カート数更新
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        // カート表示
+        function showCart() {
+            if (cart.length === 0) {
+                alert('カートは空です');
+                return;
+            }
+
+            let cartContent = 'カート内容:\n\n';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                cartContent += `${item.name} × ${item.quantity} = ¥${itemTotal}\n`;
+                total += itemTotal;
+            });
+
+            cartContent += `\n合計: ¥${total}`;
+            alert(cartContent);
+        }
+
+        // 商品詳細表示
+        function viewProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            alert(`商品詳細:\n\n${product.name}\n${product.description}\n価格: ¥${product.price}\n在庫: ${product.stock}個`);
+        }
+
+        // 初期表示
+        displayProducts();
+    </script>
+</body>
+</html>
